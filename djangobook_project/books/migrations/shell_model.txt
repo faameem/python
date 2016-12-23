@@ -1,0 +1,74 @@
+>>> from books.models import Publisher
+>>> p1 = Publisher(name='Apress',address='2855 Telegraph Avenue',city='Berkeley', state_province='CA', country='U.S.A.',website='http://www.apress.com/')
+>>> p1.save()
+>>> p2 = Publisher(name="O'Reilly", address='10 Fawcett St.',city='Cambridge', state_province='MA', country='U.S.A.',website='http://www.oreilly.com/')
+>>> p2.save()
+>>> publisher_list = Publisher.objects.all()
+>>> publisher_list
+[<Publisher: Publisher object>, <Publisher: Publisher object>]
+
+
+## to do implicit save, use create ##
+>>> p1 = Publisher.objects.create(name='Apress',
+...     address='2855 Telegraph Avenue',
+...     city='Berkeley', state_province='CA', country='U.S.A.',
+...     website='http://www.apress.com/')
+>>> p2 = Publisher.objects.create(name="O'Reilly",
+...     address='10 Fawcett St.', city='Cambridge',
+...     state_province='MA', country='U.S.A.',
+...     website='http://www.oreilly.com/')
+>>> publisher_list = Publisher.objects.all()
+>>> publisher_list 
+[<Publisher: Publisher object>, <Publisher: Publisher object>]
+
+## filtering
+>>> Publisher.objects.filter(name='Apress')
+>>> Publisher.objects.filter(country="U.S.A.",state_province="CA")
+>>> Publisher.objects.filter(name__contains="press") # notice double __
+
+## RETRIEVING SINGLE OBJECTS
+>>> Publisher.objects.get(name="Apress Publishing")
+>>> Publisher.objects.get(country="U.S.A.") ## returns 2 with error
+>>> Publisher.objects.get(name="Penguin") ## returns no object with error
+try:
+    p = Publisher.objects.get(name='Apress')
+except Publisher.DoesNotExist:
+    print ("Apress isn't in the database yet.")
+else:
+    print ("Apress is in the database.")
+    
+## ordering data
+>>> Publisher.objects.order_by("name")
+>>> Publisher.objects.order_by("address")
+>>> Publisher.objects.order_by("state_province")
+>>> Publisher.objects.order_by("state_province","address")
+>>> Publisher.objects.order_by("-name") # reverse order
+
+## chaining lookups
+>>> Publisher.objects.filter(country="U.S.A.").order_by("-name")
+
+## slicing data
+>>> Publisher.objects.order_by('name')[0]
+>>> Publisher.objects.order_by('name')[0:2]
+# negative slicing is not supported, u get error
+>>> Publisher.objects.order_by('name')[-1]  
+# easy to get around, though. Just change the order_by()
+>>> Publisher.objects.order_by('-name')[0]
+
+## UPDATING MULTIPLE OBJECTS IN ONE STATEMENT
+## save() inserts/updates all columns
+## for particular columns only use update()
+>>> Publisher.objects.filter(id=1).update(name='Apress Publishing')
+>>> Publisher.objects.all().update(country='USA')
+
+## DELETING OBJECTS
+>>> p = Publisher.objects.get(name="O'Reilly")
+>>> p.delete()
+>>> Publisher.objects.all()
+
+>>> Publisher.objects.filter(country='USA').delete()
+>>> Publisher.objects.all().delete()
+>>> Publisher.objects.all()
+
+>>> Publisher.objects.delete()
+>>> Publisher.objects.filter(country='USA').delete()
