@@ -1,4 +1,4 @@
 'date_delta' : '1'
 'log_file_path' : 'c:\temp\'
 'eml_file_path' : 'c:\temp\'
-'conn_uri' : 'mongodb://FaisalM:Welcome1@prdmidb22lx02:27017,prdmiar22lx02:27017,prdmidb72lx01:27017,prdmidb72lx03:27017/?connectTimeoutMS=30000&authMechanism=SCRAM-SHA-1&readPreference=secondaryPreferred'
+'conn_uri' : 'some-url'
